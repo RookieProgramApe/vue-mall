@@ -7,7 +7,7 @@
           v-reset-page
           type="search"
           @keyup.13="search()"
-          placeholder="输入礼品名称"
+          placeholder="输入商品名称"
           v-model="keyword"
         />
       </div>
@@ -21,9 +21,7 @@
         dots-class="dot"
       >
         <swiper-item v-for="(item, index) in banner_list" :key="index">
-<!--          <img :src="item.image" />-->
-<!--          更换图片-->
-          <img src="@/assets/image/giftTitle.jpg" />
+          <img :src="item.image" />
         </swiper-item>
       </swiper>
       <div class="notice">
@@ -55,9 +53,9 @@
         <div class="shop-list">
           <div class="title">
             <span class="line"></span>
-            <span>热门礼品</span>
+            <span>热门商品</span>
           </div>
-          <div class="list">
+          <div class="list">  <!--商品罗列-->
             <div
               class="goods"
               v-for="(item,index) in cargo_list"
@@ -65,15 +63,11 @@
               @click="goDetail(item.id)"
             >
               <div>
-<!--                <img :src="item.picture" />-->
-<!--                更换图片-->
-                <img src="@/assets/image/gift1.jpg" />
+                <img :src="item.picture" />
               </div>
               <div style="flex:1">
-<!--                图片更改-->
-<!--                <div class="am-line-1">{{item.name}}</div>-->
-                <div class="am-line-1">{{"圣洛克s5西拉子干红葡萄酒"}}</div>
-                <div class="sale">已兑换{{item.saleNum}}件</div>
+                <div class="am-line-1">{{item.name}}</div>
+                <div class="sale">已售{{item.saleNum}}件</div>
                 <div class="buy">
                   <div>
                     <span style="font-size:0.88rem;color:#E64340;">¥</span>
@@ -82,7 +76,7 @@
                       style="text-decoration:line-through;margin-left:0.5rem"
                     >￥{{item.originalPrice}}</span>
                   </div>
-                  <div class="btn">兑换</div>   <!--后台-->
+                  <div class="btn">购买</div>
                 </div>
               </div>
             </div>
@@ -106,7 +100,6 @@
         </div>
         <div>商城</div>
       </router-link>
-
       <router-link to="order" class="item">
         <div>
           <img src="@/assets/image/order-normal.png" />
@@ -114,13 +107,13 @@
         <div>订单</div>
       </router-link>
 
-      <!--        本页面-->
-      <div class="item active">
+      <!--        新增-->
+    <div class="item active">
         <div>
           <img src="@/assets/image/mall-active.png" />
         </div>
         <div>安心城</div>
-      </div>
+    </div>
 
       <router-link to="/bargaining" class="item">
         <div>
@@ -136,303 +129,304 @@
       </router-link>
     </div>
   </div>
+
 </template>
 
 <script>
-import { Loadmore, Indicator } from 'mint-ui'
-import Header from '@/components/Header'
-import { banner, bulletin, cargo } from '@/api/index'
-import { Swiper, SwiperItem } from 'vux'
-export default {
-  name: 'index',
-  components: { Header, Swiper, SwiperItem, Loadmore },
-  data() {
-    return {
-      page: '1',
-      limit: 20,
-      keyword: '',
-      banner_list: [],
-      bulletin_list: [],
-      cargo_list: [],
-      allLoaded: true,
-      totalPage: ''
+    import { banner, bulletin, credit } from '@/api/index'
+    import { Loadmore, Indicator } from 'mint-ui'
+    import Header from '@/components/Header'
+    import { Swiper, SwiperItem } from 'vux'
+    export default {
+        name: 'index',
+        components: { Header, Swiper, SwiperItem, Loadmore },
+        data() {
+            return {
+                page: '1',
+                limit: 20,
+                keyword: '',
+                banner_list: [],
+                bulletin_list: [],
+                cargo_list: [],
+                allLoaded: true,
+                totalPage: ''
+            }
+        },
+        created() {
+            this.banner()
+            this.bulletin()
+            this.credit()
+        },
+        mounted() {
+            document.title = '安纹智能商城'
+        },
+        methods: {
+            banner() {
+                banner().then(res => {
+                    this.banner_list = res.data
+                })
+            },
+            bulletin() {
+                bulletin().then(res => {
+                    this.bulletin_list = res.data
+                })
+            },
+            credit() {
+                let vm = this;
+                Indicator.open({
+                    text: 'Loading...',
+                    spinnerType: 'fading-circle'
+                })
+                credit({
+                    page: vm.page,
+                    limit: vm.limit,
+                    keyword: vm.keyword
+                }).then(res => {
+                    Indicator.close()
+                    this.cargo_list = res.data
+                    vm.totalPage = res.total
+                    if (vm.page < vm.totalPage) {
+                        vm.allLoaded = false
+                    }
+                })
+            },
+            goDetail(id) {
+                this.$router.push({
+                    path: '/detail',
+                    query: {
+                        id: id
+                    }
+                })
+            },
+            loadBottom() {
+                let vm = this
+                vm.page++;
+                credit({
+                    page: vm.page,
+                    limit: vm.limit,
+                    keyword: vm.keyword
+                }).then(res => {
+                    let newlist = res.data;
+                    vm.cargo_list = vm.cargo_list.concat(newlist)
+                    this.$refs.loadmore.onBottomLoaded()
+                    if (vm.page < vm.totalPage) {
+                        vm.allLoaded = false
+                    } else {
+                        vm.allLoaded = true
+                    }
+                })
+            },
+            search() {
+                let vm = this;
+                Indicator.open({
+                    text: 'Loading...',
+                    spinnerType: 'fading-circle'
+                })
+                vm.page = 1
+                vm.allLoaded = true
+                credit({
+                    page: vm.page,
+                    limit: vm.limit,
+                    keyword: vm.keyword
+                }).then(res => {
+                    Indicator.close()
+                    this.cargo_list = res.data
+                    vm.totalPage = res.total
+                    if (vm.page < vm.totalPage) {
+                        vm.allLoaded = false
+                    }
+                })
+            }
+        }
     }
-  },
-  created() {
-    this.banner()
-    this.bulletin()
-    this.cargo()
-  },
-  mounted() {
-    document.title = '安纹智能商城'
-  },
-  methods: {
-    banner() {
-      banner().then(res => {
-        this.banner_list = res.data
-      })
-    },
-    bulletin() {
-      bulletin().then(res => {
-        this.bulletin_list = res.data
-      })
-    },
-    cargo() {
-      let vm = this;
-      Indicator.open({
-        text: 'Loading...',
-        spinnerType: 'fading-circle'
-      })
-      cargo({
-        page: vm.page,
-        limit: vm.limit,
-        keyword: vm.keyword
-      }).then(res => {
-        Indicator.close()
-        this.cargo_list = res.data
-        vm.totalPage = res.total
-        if (vm.page < vm.totalPage) {
-          vm.allLoaded = false
-        }
-      })
-    },
-    goDetail(id) {
-      this.$router.push({
-          path: 'credit/detail',
-        query: {
-          id: id
-        }
-      })
-    },
-    loadBottom() {
-      let vm = this
-      vm.page++;
-      cargo({
-        page: vm.page,
-        limit: vm.limit,
-        keyword: vm.keyword
-      }).then(res => {
-        let newlist = res.data;
-        vm.cargo_list = vm.cargo_list.concat(newlist)
-        this.$refs.loadmore.onBottomLoaded()
-        if (vm.page < vm.totalPage) {
-          vm.allLoaded = false
-        } else {
-          vm.allLoaded = true
-        }
-      })
-    },
-    search() {
-      let vm = this;
-      Indicator.open({
-        text: 'Loading...',
-        spinnerType: 'fading-circle'
-      })
-      vm.page = 1
-      vm.allLoaded = true
-      cargo({
-        page: vm.page,
-        limit: vm.limit,
-        keyword: vm.keyword
-      }).then(res => {
-        Indicator.close()
-        this.cargo_list = res.data
-        vm.totalPage = res.total
-        if (vm.page < vm.totalPage) {
-          vm.allLoaded = false
-        }
-      })
-    }
-  }
-}
 </script>
 
 <style lang="less">
-.container {
-  min-height: 100vh;
-  background: #f7f7f7;
-  .serchInput {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: #0095fe;
-    height: 3rem;
-    display: flex;
-    align-items: center;
-    padding: 0.31rem 0.63rem;
-    box-sizing: border-box;
-    .search {
-      background: #ffffff;
-      z-index: 999;
+  .container {
+    min-height: 100vh;
+    background: #f7f7f7;
+    .serchInput {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #0095fe;
+      height: 3rem;
       display: flex;
       align-items: center;
-      height: 1.88rem;
-      border-radius: 0.94rem;
-      width: 100%;
+      padding: 0.31rem 0.63rem;
       box-sizing: border-box;
-      overflow: hidden;
-      padding: 0 1rem;
-      input {
-        flex: 1;
-        border: none;
-        outline: none;
+      .search {
+        background: #ffffff;
+        z-index: 999;
+        display: flex;
+        align-items: center;
         height: 1.88rem;
-        line-height: 1.88rem;
         border-radius: 0.94rem;
-        font-size: 0.81rem;
-        color: #666;
-        text-indent: 0.31rem;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
+        padding: 0 1rem;
+        input {
+          flex: 1;
+          border: none;
+          outline: none;
+          height: 1.88rem;
+          line-height: 1.88rem;
+          border-radius: 0.94rem;
+          font-size: 0.81rem;
+          color: #666;
+          text-indent: 0.31rem;
+        }
+        input::placeholder {
+          font-size: 0.81rem;
+          color: #a9a9a9;
+        }
+        img {
+          width: 1.25rem;
+          height: 1.25rem;
+        }
       }
-      input::placeholder {
+    }
+    .search-box {
+      position: fixed;
+      top: 3rem;
+      width: 100%;
+      z-index: 999;
+      .swiper {
+        width: 100%;
+        margin-top: -0.1rem;
+        .vux-slider > .vux-indicator-center {
+          bottom: 0.5rem !important;
+        }
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+    .dot {
+      bottom: 0 !important;
+    }
+    .vux-slider > .vux-indicator > a > .vux-icon-dot,
+    .vux-slider .vux-indicator-right > a > .vux-icon-dot {
+      background-color: #ffffff !important;
+      width: 0.25rem !important;
+      height: 0.25rem !important;
+    }
+    .vux-slider > .vux-indicator > a > .vux-icon-dot.active,
+    .vux-slider .vux-indicator-right > a > .vux-icon-dot.active {
+      background-color: #ffb780 !important;
+      width: 00.81rem !important;
+      height: 0.25rem !important;
+    }
+    .notice {
+      display: flex;
+      align-items: center;
+      background: #fff;
+      height: 2.19rem;
+      padding: 0 0.88rem;
+      .swiper-notice {
         font-size: 0.81rem;
-        color: #a9a9a9;
+        color: #262626;
+        margin-left: 1.22rem;
+        flex: 1;
+        .content {
+          line-height: 2.19rem;
+        }
       }
       img {
         width: 1.25rem;
         height: 1.25rem;
       }
     }
-  }
-  .search-box {
-    position: fixed;
-    top: 3rem;
-    width: 100%;
-    z-index: 999;
-    .swiper {
+    .footer {
+      position: fixed;
+      bottom: 0;
       width: 100%;
-      margin-top: -0.1rem;
-      .vux-slider > .vux-indicator-center {
-        bottom: 0.5rem !important;
-      }
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-  }
-  .dot {
-    bottom: 0 !important;
-  }
-  .vux-slider > .vux-indicator > a > .vux-icon-dot,
-  .vux-slider .vux-indicator-right > a > .vux-icon-dot {
-    background-color: #ffffff !important;
-    width: 0.25rem !important;
-    height: 0.25rem !important;
-  }
-  .vux-slider > .vux-indicator > a > .vux-icon-dot.active,
-  .vux-slider .vux-indicator-right > a > .vux-icon-dot.active {
-    background-color: #ffb780 !important;
-    width: 00.81rem !important;
-    height: 0.25rem !important;
-  }
-  .notice {
-    display: flex;
-    align-items: center;
-    background: #fff;
-    height: 2.19rem;
-    padding: 0 0.88rem;
-    .swiper-notice {
-      font-size: 0.81rem;
-      color: #262626;
-      margin-left: 1.22rem;
-      flex: 1;
-      .content {
-        line-height: 2.19rem;
-      }
-    }
-    img {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-  }
-  .footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background: #fff;
-    height: 3.06rem;
-    font-size: 0.63rem;
-    display: flex;
-    align-items: center;
-    .item {
-      flex: 1;
-      text-align: center;
-    }
-    a {
-      color: #333333;
-    }
-    img {
-      width: 1.38rem;
-      height: 1.38rem;
-    }
-    .active {
-      color: #0085fe;
-    }
-  }
-  .shop-list {
-    padding: 0 0.94rem;
-    .title {
-      margin-top: 1.25rem;
-
-      display: flex;
-      font-size: 0.94rem;
-      color: #333;
-      align-items: center;
-      .line {
-        width: 0.19rem;
-        height: 0.88rem;
-        background: #0085fe;
-        margin-right: 0.47rem;
-      }
-    }
-    .goods {
-      display: flex;
-      align-items: center;
       background: #fff;
-      margin-top: 0.75rem;
-      border-radius: 0.31rem;
-      padding: 0.78rem 0.63rem;
-      font-size: 0.87rem;
-      color: #000000;
+      height: 3.06rem;
+      font-size: 0.63rem;
+      display: flex;
+      align-items: center;
+      .item {
+        flex: 1;
+        text-align: center;
+      }
+      a {
+        color: #333333;
+      }
       img {
-        width: 5rem;
-        height: 5rem;
-        margin-right: 0.84rem;
+        width: 1.38rem;
+        height: 1.38rem;
       }
-      .sale {
-        font-size: 0.75rem;
-        color: #a9a9a9;
+      .active {
+        color: #0085fe;
       }
-      .buy {
+    }
+    .shop-list {
+      padding: 0 0.94rem;
+      .title {
+        margin-top: 1.25rem;
+
+        display: flex;
+        font-size: 0.94rem;
+        color: #333;
+        align-items: center;
+        .line {
+          width: 0.19rem;
+          height: 0.88rem;
+          background: #0085fe;
+          margin-right: 0.47rem;
+        }
+      }
+      .goods {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        font-size: 0.75rem;
-        color: #a9a9a9;
-        .btn {
+        background: #fff;
+        margin-top: 0.75rem;
+        border-radius: 0.31rem;
+        padding: 0.78rem 0.63rem;
+        font-size: 0.87rem;
+        color: #000000;
+        img {
+          width: 5rem;
+          height: 5rem;
+          margin-right: 0.84rem;
+        }
+        .sale {
           font-size: 0.75rem;
-          color: #fff;
-          background: linear-gradient(to right, #0095fe, #0066fe);
-          border-radius: 0.63rem;
-          width: 3.75rem;
-          height: 1.25rem;
-          text-align: center;
-          line-height: 1.25rem;
+          color: #a9a9a9;
+        }
+        .buy {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          font-size: 0.75rem;
+          color: #a9a9a9;
+          .btn {
+            font-size: 0.75rem;
+            color: #fff;
+            background: linear-gradient(to right, #0095fe, #0066fe);
+            border-radius: 0.63rem;
+            width: 3.75rem;
+            height: 1.25rem;
+            text-align: center;
+            line-height: 1.25rem;
+          }
         }
       }
     }
-  }
-  .advertising {
-    padding: 0rem 0.94rem 4.22rem 0.94rem;
-    img {
-      width: 100%;
-      height: 5rem;
-      border-radius: 0.31rem;
+    .advertising {
+      padding: 0rem 0.94rem 4.22rem 0.94rem;
+      img {
+        width: 100%;
+        height: 5rem;
+        border-radius: 0.31rem;
+      }
+    }
+    .page-loadmore-wrapper {
+      height: calc(100vh - 15.79rem);
     }
   }
-  .page-loadmore-wrapper {
-    height: calc(100vh - 15.79rem);
-  }
-}
 </style>

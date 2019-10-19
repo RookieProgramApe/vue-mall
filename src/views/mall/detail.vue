@@ -81,7 +81,7 @@
           @click="chooseSku(item.id,item.inventory)"
         >{{item.name}}</div>
       </div>
-      <div class="title">套餐</div>
+      <div class="title" v-if="goodsInfo.categoryList.length>0">套餐</div>
       <div class="sku">
         <div style="margin-left: 0rem; margin-left: 5px;"
           v-for="(item,index) in goodsInfo.categoryList"

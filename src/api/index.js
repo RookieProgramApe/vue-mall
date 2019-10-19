@@ -30,6 +30,15 @@ export function cargo(data) {
 }
 
 
+export function credit(data) {
+  return request({
+    url: 'api/credit/all',
+    method: 'post',
+    params: data
+  })
+}
+
+
 export function mytype(data) {
   return request({
     url: 'api/cargo/type',
@@ -214,6 +223,7 @@ export function detail(data) {
     params: data
   })
 }
+
 
 export function getCredit(data) {
   return request({

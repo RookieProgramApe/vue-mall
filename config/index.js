@@ -11,8 +11,8 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        //target: 'https://aw.wisehuitong.com/lockagent/',
-        target: 'http://localhost:8088/lockagent/',
+        target: 'https://aw.wisehuitong.com/lockagent/',
+        //target: 'http://localhost:8088/lockagent/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -20,7 +20,7 @@ module.exports = {
       }
     },
     // Various Dev Server settings
-    host: '192.168.3.74', // can be overwritten by process.env.HOST
+    host: 'localhost', // can be overwritten by process.env.HOST
     port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,

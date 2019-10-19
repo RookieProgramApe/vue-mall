@@ -33,10 +33,10 @@
     <div class="detail">
       <div class="price">
         <div>
-          <span>¥{{goodsInfo.salePrice}}</span>
+          <span>❤{{goodsInfo.salePrice}}</span>
           <span
             style="text-decoration: line-through;font-size: 0.75rem;color:#A9A9A9"
-          >￥{{goodsInfo.originalPrice}}</span>
+          >❤{{goodsInfo.originalPrice}}</span>
         </div>
         <div class="sale">已兑换{{goodsInfo.saleNum}}件</div>
       </div>
@@ -63,7 +63,7 @@
         </div>
         <div>
           <p class="prices">
-            <span style="color:#E64340;font-size:0.88rem;">¥</span>
+            <span style="color:#E64340;font-size:0.88rem;">❤</span>
             <span style="color:#E64340;font-size:1.13rem;">{{goodsInfo.salePrice}}</span>
           </p>
           <p class="sale">库存{{inventory}}件</p>
@@ -72,13 +72,14 @@
           <img src="@/assets/image/close.png" />
         </div>
       </div>
-      <div class="title">种类</div>
+      <div class="title">规格</div>
       <div class="sku">
         <div
           v-for="(item,index) in goodsInfo.sku"
           :key="index"
           :class="item.id==skuId?'active':''"
           @click="chooseSku(item.id,item.inventory)"
+          style="margin-left: 0rem"
         >{{item.name}}</div>
       </div>
       <div class="num">
@@ -110,7 +111,7 @@ export default {
   components: { Header, Swiper },
   data() {
     return {
-      title: '商品详情',
+      title: '礼品详情',
       id: '',
       goodsInfo: '',
       banner_index: 0,
@@ -143,7 +144,7 @@ export default {
     this.getDetail()
   },
   mounted() {
-    document.title = '商品详情'
+    document.title = '礼品详情'
     this.isPlay()
     window.addEventListener('scroll', this.getScrollTop)
   },
@@ -355,7 +356,7 @@ window.requestAnimFrame = (function () {
       z-index: 201;
       bottom: 2.69rem;
       display: flex;
-      align-items: cenetr;
+      align-items: center;
       justify-content: center;
       div {
         background: #dfdfdf;
