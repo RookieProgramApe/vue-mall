@@ -21,7 +21,7 @@
           <div>
             <p class="name am-line-2">{{goodsInfo.name}}</p>
             <div class="sku">
-              <div>{{cateName == ""?skuName:skuName + " | " + cateName}}</div>
+              <div>{{cateName == null || cateName == ""?skuName:skuName + " | " + cateName}}</div>
             </div>
           </div>
           <div class="num">
