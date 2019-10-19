@@ -40,7 +40,7 @@
               <div style="flex:1">
                 <p class="name am-line-2">{{item.cargoName}}</p>
                 <div class="sku">
-                  <div>{{item.cateName == ""?item.skuName:item.skuName + " | " + item.cateName}}</div>
+                  <div>{{item.cateName == null || item.cateName == ""?item.skuName:item.skuName + " | " + item.cateName}}</div>
                 </div>
               </div>
               <div class="num">
