@@ -224,6 +224,14 @@ export function detail(data) {
   })
 }
 
+export function creditDetail(data) {
+  return request({
+    url: 'api/credit/detail',
+    method: 'post',
+    params: data
+  })
+}
+
 
 export function getCredit(data) {
   return request({
@@ -236,6 +244,14 @@ export function getCredit(data) {
 export function pay(data) {
   return request({
     url: 'api/cargo/pay',
+    method: 'post',
+    params: data
+  })
+}
+
+export function creditPay(data) {
+  return request({
+    url: 'api/credit/pay',
     method: 'post',
     params: data
   })

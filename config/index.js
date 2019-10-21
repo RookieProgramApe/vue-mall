@@ -12,7 +12,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         target: 'https://aw.wisehuitong.com/lockagent/',
-        //target: 'http://localhost:8088/lockagent/',
+        // target: 'http://localhost:8088/lockagent/',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

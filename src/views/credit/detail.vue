@@ -33,10 +33,17 @@
     <div class="detail">
       <div class="price">
         <div>
-          <span>❤{{goodsInfo.salePrice}}</span>
+          <span style="font-size:0.88rem;color:#E64340;">¥</span>
+          <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.salePrice}}</span>
+          <span style="font-size:1.44rem;color:#E64340;">+</span>
+          <span style="color:#E64340;font-size:0.88rem;">❤</span>
+          <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
           <span
+            style="text-decoration:line-through;margin-left:0.5rem"
+          >￥{{goodsInfo.originalPrice}}</span>
+          <!-- <span
             style="text-decoration: line-through;font-size: 0.75rem;color:#A9A9A9"
-          >❤{{goodsInfo.originalPrice}}</span>
+          >￥{{goodsInfo.originalPrice}}</span> -->
         </div>
         <div class="sale">已兑换{{goodsInfo.saleNum}}件</div>
       </div>
@@ -63,16 +70,22 @@
         </div>
         <div>
           <p class="prices">
+            <span style="font-size:0.88rem;color:#E64340;">¥</span>
+            <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.salePrice}}</span>
+            <span style="font-size:1.44rem;color:#E64340;">+</span>
             <span style="color:#E64340;font-size:0.88rem;">❤</span>
-            <span style="color:#E64340;font-size:1.13rem;">{{goodsInfo.salePrice}}</span>
+            <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
+            <span
+              style="text-decoration:line-through;margin-left:0.5rem"
+            >￥{{goodsInfo.originalPrice}}</span>
           </p>
-          <p class="sale">库存{{inventory}}件</p>
+          <!-- <p class="sale">库存{{inventory}}件</p> -->
         </div>
         <div class="close" @click="closeModel">
           <img src="@/assets/image/close.png" />
         </div>
       </div>
-      <div class="title">规格</div>
+      <!-- <div class="title">规格</div>
       <div class="sku">
         <div
           v-for="(item,index) in goodsInfo.sku"
@@ -81,7 +94,7 @@
           @click="chooseSku(item.id,item.inventory)"
           style="margin-left: 0rem"
         >{{item.name}}</div>
-      </div>
+      </div> -->
       <div class="num">
         <label>兑换数量</label>
         <span>1件</span>
@@ -102,12 +115,13 @@
 </template>
 
 <script>
-import { MessageBox, Toast, Indicator } from 'mint-ui'
+// import { MessageBox, Toast, Indicator } from 'mint-ui'
+import { MessageBox, Indicator } from 'mint-ui'
 import Header from '@/components/Header'
-import { detail } from '@/api/index'
+import { creditDetail } from '@/api/index'
 import { Swiper } from 'vux'
 export default {
-  name: 'detail',
+  name: 'creditDetail',
   components: { Header, Swiper },
   data() {
     return {
@@ -154,7 +168,7 @@ export default {
         text: 'Loading...',
         spinnerType: 'fading-circle'
       })
-      detail({
+      creditDetail({
         id: this.id
       }).then(res => {
         Indicator.close()
@@ -205,26 +219,24 @@ export default {
     closeModel() {
       this.showStatus = false
     },
-    chooseSku(id, inventory) {
-      this.skuId = id;
-      this.inventory = inventory
-    },
+    // chooseSkuchooseSku(id, inventory) {
+    //   this.skuId = id;
+    //   this.inventory = inventory
+    // },
     buy() {
       let vm = this;
-      if (vm.inventory < 1) {
-        Toast({
-          message: '该规格商品库存不足，请选择其他规格',
-          position: 'middle',
-          duration: 2000
-      })
-        return false
-      }
+      // if (vm.inventory < 1) {
+      //   Toast({
+      //     message: '该规格商品库存不足，请选择其他规格',
+      //     position: 'middle',
+      //     duration: 2000
+      // })
+      //   return false
+      // }
       vm.$router.push({
-        path: '/settlement',
+        path: '/creditSettlement',
         query: {
-          cargoId: vm.id,
-          skuId: vm.skuId,
-            skuType: vm.skuType
+          cargoId: vm.id
         }
       })
     },

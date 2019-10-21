@@ -20,9 +20,9 @@
         <div class="price">
           <div>
             <p class="name am-line-2">{{goodsInfo.name}}</p>
-            <div class="sku">
+            <!-- <div class="sku">
               <div>{{skuName}}</div>
-            </div>
+            </div> -->
           </div>
           <div class="num">
             <p style="margin-top:0.59rem">￥{{goodsInfo.salePrice}}</p>
@@ -39,7 +39,7 @@
           <label>订单备注</label>
           <input v-reset-page placeholder="选填" v-model="remark" />
         </div>
-        <div class="item">
+        <!-- <div class="item">
           <label>
             可用积分{{credit}}抵用
             <span style="margin-left:0;color:#E64340;">{{discount}}</span>元
@@ -47,7 +47,7 @@
           <group>
             <x-switch title v-model="isDeduct" @on-change="switchChange"></x-switch>
           </group>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="input-box" v-if="goodsInfo.iscard == 1">
@@ -74,7 +74,7 @@
 <script>
 import wx from 'weixin-js-sdk'
 import { MessageBox, Toast, Indicator } from 'mint-ui'
-import { detail, myAddress, getCredit, pay } from '@/api/index'
+import { myInfo, creditDetail, myAddress, getCredit, creditPay } from '@/api/index'
 import Header from '@/components/Header'
 import { XSwitch, Group } from 'vux'
 export default {
@@ -84,7 +84,7 @@ export default {
     return {
       title: '订单结算',
       cargoId: '',
-      skuId: '',
+      // skuId: '',
       skuName: '',
       province: '',
       city: '',
@@ -102,14 +102,15 @@ export default {
       mobile: '',
       isOriginHei: true,
       documentHeight: document.documentElement.clientHeight,
-      salePrice: ''
+      salePrice: '',
+      userInfo: ''
     }
   },
   created() {
     this.cargoId = this.$route.query.cargoId
-    this.skuId = this.$route.query.skuId
+    // this.skuId = this.$route.query.skuId
     this.getDetail()
-    this.getCredit()
+    // this.getCredit()
   },
   activated() {
     this.myAddress()
@@ -127,22 +128,27 @@ export default {
     }
   },
   methods: {
+    myInfo() {
+      myInfo().then(res => {
+        this.userInfo = res.data
+      })
+    },
     getDetail() {
       Indicator.open({
         text: 'Loading...',
         spinnerType: 'fading-circle'
       })
-      detail({
+      creditDetail({
         id: this.cargoId
       }).then(res => {
         this.goodsInfo = res.data
         this.salePrice = this.goodsInfo.salePrice
         Indicator.close()
-        this.goodsInfo.sku.forEach((item) => {
-          if (item.id === this.skuId) {
-            this.skuName = item.name
-          }
-        })
+        // this.goodsInfo.sku.forEach((item) => {
+        //   if (item.id === this.skuId) {
+        //     this.skuName = item.name
+        //   }
+        // })
       })
     },
     chooseAddress() {
@@ -216,13 +222,25 @@ export default {
             text: 'Loading...',
             spinnerType: 'fading-circle'
           })
-          pay({
+
+          // 判断积分是否足够
+          myInfo().then(res => {
+            if (res.data.integral < this.goodsInfo.point) {
+              Toast({
+                message: '您的积分余额不足',
+                position: 'middle',
+                duration: 2000
+              })
+            }
+          })
+
+          creditPay({
             addressId: vm.addressId,
             cardNum: vm.cardNum,
             cardPwd: vm.cardPwd,
             cargoId: vm.cargoId,
             isDeduct: vm.isDeduct ? 1 : 0,
-            skuId: vm.skuId,
+            // skuId: vm.skuId,
             remark: vm.remark
           }).then(res => {
             Indicator.close()
@@ -263,7 +281,7 @@ export default {
       }
   },
   beforeRouteEnter(to, from, next) {
-    if (from.path === '/detail') {
+    if (from.path === '/creditDetail') {
       next(vm => {
         vm.$router.go(0)
       })

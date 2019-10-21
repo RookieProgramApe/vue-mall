@@ -140,15 +140,15 @@ export const constantRouterMap = [
     component: _import('credit/index')
   },
   {
-    path: '/credit/detail',
+    path: '/creditDetail',
     component: _import('credit/detail')
   },
   {
-    path: '/paySuccess',
+    path: '/creditPaySuccess',
     component: _import('credit/paySuccess')
   },
   {
-    path: '/settlement',
+    path: '/creditSettlement',
     component: _import('credit/settlement'),
     meta: {
       keepAlive: true

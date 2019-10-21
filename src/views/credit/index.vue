@@ -50,17 +50,16 @@
         :autoFill="false"
         ref="loadmore"
       >
+      <!-- 免费兑换的商品由此开始 -->
         <div class="shop-list">
           <div class="title">
             <span class="line"></span>
-            <span>热门商品</span>
+            <span>免费兑换</span>
           </div>
           <div class="list">  <!--商品罗列-->
-            <div
-              class="goods"
-              v-for="(item,index) in cargo_list"
-              :key="index"
-              @click="goDetail(item.id)"
+            <div v-for="(item,index) in cargo_list" :key="index">
+            <div class="goods"
+              @click="goDetail(item.id)" v-if="item.iscard == 1"
             >
               <div>
                 <img :src="item.picture" />
@@ -72,16 +71,58 @@
                   <div>
                     <span style="font-size:0.88rem;color:#E64340;">¥</span>
                     <span style="font-size:1.44rem;color:#E64340;">{{item.salePrice}}</span>
+                    <span style="font-size:1.44rem;color:#E64340;">+</span>
+                    <span style="color:#E64340;font-size:0.88rem;">❤</span>
+                    <span style="font-size:1.44rem;color:#E64340;">{{item.point}}</span>
                     <span
                       style="text-decoration:line-through;margin-left:0.5rem"
                     >￥{{item.originalPrice}}</span>
                   </div>
-                  <div class="btn">购买</div>
+                  <div class="btn">兑换</div>
                 </div>
               </div>
             </div>
+            </div>
           </div>
         </div>
+        <!-- 免费兑换的商品由此结束 -->
+
+        <!-- 非免费兑换的商品由此开始 -->
+        <div class="shop-list">
+          <div class="title">
+            <span class="line"></span>
+            <span>兑换商品</span>
+          </div>
+          <div class="list">  <!--商品罗列-->
+            <div v-for="(item,index) in cargo_list" :key="index">
+            <div class="goods"
+              @click="goDetail(item.id)" v-if="item.iscard == 0"
+            >
+              <div>
+                <img :src="item.picture" />
+              </div>
+              <div style="flex:1">
+                <div class="am-line-1">{{item.name}}</div>
+                <div class="sale">已售{{item.saleNum}}件</div>
+                <div class="buy">
+                  <div>
+                    <span style="font-size:0.88rem;color:#E64340;">¥</span>
+                    <span style="font-size:1.44rem;color:#E64340;">{{item.salePrice}}</span>
+                    <span style="font-size:1.44rem;color:#E64340;">+</span>
+                    <span style="color:#E64340;font-size:0.88rem;">❤</span>
+                    <span style="font-size:1.44rem;color:#E64340;">{{item.point}}</span>
+                    <span
+                      style="text-decoration:line-through;margin-left:0.5rem"
+                    >￥{{item.originalPrice}}</span>
+                  </div>
+                  <div class="btn">兑换</div>
+                </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+        <!-- 非免费兑换的商品由此结束 -->
       </mt-loadmore>
       <div class="loadmore" v-if="cargo_list.length&&!allLoaded">
         <div>上拉加载更多</div>
@@ -191,12 +232,12 @@
                 })
             },
             goDetail(id) {
-                this.$router.push({
-                    path: '/detail',
-                    query: {
-                        id: id
-                    }
-                })
+              this.$router.push({
+                  path: '/creditDetail',
+                  query: {
+                      id: id
+                  }
+              })
             },
             loadBottom() {
                 let vm = this
