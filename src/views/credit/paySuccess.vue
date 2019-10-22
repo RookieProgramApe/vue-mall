@@ -1,11 +1,12 @@
 <template>
   <div class="paySuccess-container">
     <div class="option">
+      <img style="width: 100%; padding: 5px;" src="@/assets/image/success001.jpg" alt />
       <div class="icon">
-        <img src="@/assets/image/success.png" alt />
-        <div>购买成功</div>
+        <!-- <div>购买成功</div> -->
       </div>
       <div class="btn">
+        <button @click="goCargoDetail">去领取</button>
         <button @click="goMall">返回商城</button>
         <button @click="goOrder">查看我的订单</button>
       </div>
@@ -33,6 +34,9 @@ export default {
     },
     goOrder() {
       this.$router.push('/order')
+    },
+    goCargoDetail() {
+      this.$router.push('/detail?id=f16db92bf6c7f8ba0e820f70c6ef9d42');
     }
   }
 }

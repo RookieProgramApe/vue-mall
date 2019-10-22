@@ -39,7 +39,7 @@
             <div class="price">
               <div style="flex:1">
                 <p class="name am-line-2">{{item.cargoName}}</p>
-                <div class="sku">
+                <div class="sku" v-if="item.skuName">
                   <div>{{item.cateName == null || item.cateName == ""?item.skuName:item.skuName + " | " + item.cateName}}</div>
                 </div>
               </div>
@@ -50,7 +50,7 @@
             </div>
           </div>
           <div class="total">
-            <div>提货卡号：{{item.giftcardNum}}</div>
+            <div v-if="item.giftcardNum">提货卡号：{{item.giftcardNum}}</div>
             <div>
               <span style="color:#333333">合计：</span>
               <span style="color:#E64340;font-size:1.06rem">¥{{item.totalPrice}}</span>
@@ -69,6 +69,7 @@
           <div class="option">
             <div>
               <span @click="call(item.phone)">客服电话</span>
+              <span @click="appraise()">评价</span>
             </div>
             <div>
               <span v-if="item.status==4" @click="orderByaz(item.id)">申请安装</span>
@@ -101,9 +102,9 @@
       <!--        新增-->
       <router-link to="/credit" class="item">
         <div>
-          <img src="@/assets/image/mall-normal.png" />
+          <img src="@/assets/image/icon002.png" />
         </div>
-        <div>积分商城</div>
+        <div>安心城</div>
       </router-link>
 
       <router-link to="/bargaining" class="item">
@@ -150,6 +151,8 @@ export default {
       this.status = status
       this.page = 1
       this.getOrder()
+    },
+    appraise(){
     },
     getOrder() {
       let vm = this

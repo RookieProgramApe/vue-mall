@@ -10,14 +10,15 @@
       ref="loadmore"
     >
       <div class="integral-top">
-        <span>当前积分</span>
+        <span>当前安心值：</span>
         <span>{{integral}}</span>
       </div>
       <div class="integral-list">
         <div class="list" v-for="(item,index) in list" :key="index">
           <div>
             <span class="label">{{item.title}}</span>
-            <span class="integral">{{item.type=='1'?'+':'-'}}{{item.point}}</span>
+            <span class="integral" v-if="item.type=='1'">'+'{{item.point}}</span>
+            <span class="integral1" v-if="item.type!='1'">'-'{{item.point}}</span>
           </div>
           <div>
             <span class="money">交易额：{{item.amount}}元</span>
@@ -48,7 +49,7 @@ export default {
   components: { Header, Loadmore },
   data() {
     return {
-      title: '我的积分',
+      title: '我的安心值',
       page: 1,
       integral: '',
       limit: 20,
@@ -62,7 +63,7 @@ export default {
     this.myCredit();
   },
   mounted() {
-    document.title = '我的积分'
+    document.title = '我的安心值'
   },
   methods: {
     myCredit() {
@@ -149,6 +150,10 @@ export default {
         .integral {
           font-size: 0.94rem;
           color: #e64340;
+        }
+        .integral1 {
+          font-size: 0.94rem;
+          color: #67C23A;
         }
         .money {
           font-size: 0.75rem;

@@ -5,10 +5,12 @@
         <div class="avatar">
           <img :src="userInfo.avatar" />
         </div>
-        <div class="intergal" v-if="userInfo">
-          <div>{{userInfo.nickname}}</div>
-          <div>我的积分：{{userInfo.integral}}</div>
-        </div>
+        <router-link :to="{path:'/integral',query:{integral:userInfo.integral}}" class="item">
+          <div class="intergal" v-if="userInfo">
+            <div>{{userInfo.nickname}}</div>
+            <div>安心值：{{userInfo.integral}}</div>
+          </div>
+        </router-link>
       </div>
       <div class="apply"  @click="goAgent">
         <img src="@/assets/image/my-intro.png" />
@@ -27,9 +29,9 @@
         </router-link>
         <router-link :to="{path:'/integral',query:{integral:userInfo.integral}}" class="item">
           <div class="icon">
-            <img src="@/assets/image/integral.png" />
+            <img src="@/assets/image/icon001.png" />
           </div>
-          <div class="name">我的积分</div>
+          <div class="name">我的安心值</div>
           <div class="arrow">
             <img src="@/assets/image/arrow-rights.png" />
           </div>
@@ -82,7 +84,7 @@
       <!--        新增-->
       <router-link to="/credit" class="item">
         <div>
-          <img src="@/assets/image/mall-normal.png" />
+          <img src="@/assets/image/icon002.png" />
         </div>
         <div>安心城</div>
       </router-link>

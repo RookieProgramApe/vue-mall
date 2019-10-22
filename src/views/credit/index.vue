@@ -54,7 +54,7 @@
         <div class="shop-list">
           <div class="title">
             <span class="line"></span>
-            <span>免费兑换</span>
+            <span>免费领取</span>
           </div>
           <div class="list">  <!--商品罗列-->
             <div v-for="(item,index) in cargo_list" :key="index">
@@ -66,17 +66,19 @@
               </div>
               <div style="flex:1">
                 <div class="am-line-1">{{item.name}}</div>
-                <div class="sale">已售{{item.saleNum}}件</div>
+                <div class="sale">已兑换 {{item.saleNum}} 件 <span
+                      style="text-decoration:line-through;margin-left:0.5rem"
+                    >原价：￥{{item.originalPrice}}</span></div>
                 <div class="buy">
                   <div>
+                    <span style="color:#E64340;font-size:1rem;">❤</span>
+                    <span style="font-size:1.44rem;color:#E64340;">{{item.point}}</span>
+                    <span style="font-size:1.44rem;">+</span>
                     <span style="font-size:0.88rem;color:#E64340;">¥</span>
                     <span style="font-size:1.44rem;color:#E64340;">{{item.salePrice}}</span>
-                    <span style="font-size:1.44rem;color:#E64340;">+</span>
-                    <span style="color:#E64340;font-size:0.88rem;">❤</span>
-                    <span style="font-size:1.44rem;color:#E64340;">{{item.point}}</span>
-                    <span
+                    <!-- <span
                       style="text-decoration:line-through;margin-left:0.5rem"
-                    >￥{{item.originalPrice}}</span>
+                    >￥{{item.originalPrice}}</span> -->
                   </div>
                   <div class="btn">兑换</div>
                 </div>
@@ -103,17 +105,16 @@
               </div>
               <div style="flex:1">
                 <div class="am-line-1">{{item.name}}</div>
-                <div class="sale">已售{{item.saleNum}}件</div>
+                <div class="sale">已兑换 {{item.saleNum}} 件 <span
+                      style="text-decoration:line-through;margin-left:0.5rem"
+                    >原价：￥{{item.originalPrice}}</span></div>
                 <div class="buy">
                   <div>
-                    <span style="font-size:0.88rem;color:#E64340;">¥</span>
-                    <span style="font-size:1.44rem;color:#E64340;">{{item.salePrice}}</span>
-                    <span style="font-size:1.44rem;color:#E64340;">+</span>
-                    <span style="color:#E64340;font-size:0.88rem;">❤</span>
+                    <span style="color:#E64340;font-size:1.2rem;">❤</span>
                     <span style="font-size:1.44rem;color:#E64340;">{{item.point}}</span>
-                    <span
-                      style="text-decoration:line-through;margin-left:0.5rem"
-                    >￥{{item.originalPrice}}</span>
+                    <span style="font-size:1.44rem;">+</span>
+                    <span style="font-size:1.2rem;color:#E64340;">¥</span>
+                    <span style="font-size:1.44rem;color:#E64340;">{{item.salePrice}}</span>
                   </div>
                   <div class="btn">兑换</div>
                 </div>
@@ -151,7 +152,7 @@
       <!--        新增-->
     <div class="item active">
         <div>
-          <img src="@/assets/image/mall-active.png" />
+          <img src="@/assets/image/icon003.png" />
         </div>
         <div>安心城</div>
     </div>

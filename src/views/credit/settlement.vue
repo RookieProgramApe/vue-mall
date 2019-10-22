@@ -227,7 +227,7 @@ export default {
           myInfo().then(res => {
             if (res.data.integral < this.goodsInfo.point) {
               Toast({
-                message: '您的积分余额不足',
+                message: '您的安心值余额不足',
                 position: 'middle',
                 duration: 2000
               })
@@ -256,7 +256,7 @@ export default {
                   'signType': payConfig.signType,
                   'paySign': payConfig.paySign,
                   'success': function (result) {
-                    vm.$router.push('/paySuccess')
+                    vm.$router.push('/creditPaySuccess')
                   },
                   'fail': function (result) {
                     console.log(result)

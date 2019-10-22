@@ -108,9 +108,9 @@
       </router-link>
 
       <!--        新增-->
-      <router-link to="credit" class="item">
+      <router-link to="/credit" class="item">
         <div>
-          <img src="@/assets/image/mall-normal.png" />
+          <img src="@/assets/image/icon002.png" />
         </div>
         <div>安心城</div>
       </router-link>

@@ -33,13 +33,13 @@
     <div class="detail">
       <div class="price">
         <div>
+          <span style="color:#E64340;font-size:1.2rem;">❤</span>
+          <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
+          <span style="font-size:1.44rem;color:#a9a9a9;">+</span>
           <span style="font-size:0.88rem;color:#E64340;">¥</span>
           <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.salePrice}}</span>
-          <span style="font-size:1.44rem;color:#E64340;">+</span>
-          <span style="color:#E64340;font-size:0.88rem;">❤</span>
-          <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
           <span
-            style="text-decoration:line-through;margin-left:0.5rem"
+            style="text-decoration:line-through;margin-left:0.5rem;color:#a9a9a9;"
           >￥{{goodsInfo.originalPrice}}</span>
           <!-- <span
             style="text-decoration: line-through;font-size: 0.75rem;color:#A9A9A9"
@@ -70,14 +70,14 @@
         </div>
         <div>
           <p class="prices">
+            <span
+              style="text-decoration:line-through;margin-left:0.5rem;color:#a9a9a9;"
+            >￥{{goodsInfo.originalPrice}}</span><br>
+            <span style="color:#E64340;font-size:1.2rem;">❤</span>
+            <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
+            <span style="font-size:1.44rem;color:#a9a9a9;">+</span>
             <span style="font-size:0.88rem;color:#E64340;">¥</span>
             <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.salePrice}}</span>
-            <span style="font-size:1.44rem;color:#E64340;">+</span>
-            <span style="color:#E64340;font-size:0.88rem;">❤</span>
-            <span style="font-size:1.44rem;color:#E64340;">{{goodsInfo.point}}</span>
-            <span
-              style="text-decoration:line-through;margin-left:0.5rem"
-            >￥{{goodsInfo.originalPrice}}</span>
           </p>
           <!-- <p class="sale">库存{{inventory}}件</p> -->
         </div>
