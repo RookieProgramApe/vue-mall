@@ -80,7 +80,7 @@
                       style="text-decoration:line-through;margin-left:0.5rem"
                     >￥{{item.originalPrice}}</span> -->
                   </div>
-                  <div class="btn">兑换</div>
+                  <div class="btn">免费领取</div>
                 </div>
               </div>
             </div>

@@ -42,6 +42,11 @@
                 <div class="sku" v-if="item.skuName">
                   <div>{{item.cateName == null || item.cateName == ""?item.skuName:item.skuName + " | " + item.cateName}}</div>
                 </div>
+                <!-- 免费领取 -->
+                <div v-if="item.type=='3'" class="sku">
+                  <div v-if="item.giftcardNum">免费领取</div>
+                  <div v-else>积分兑换</div>
+                </div>
               </div>
               <div class="num">
                 <p style="margin-top:0.59rem">￥{{item.unitPrice}}</p>
@@ -50,9 +55,10 @@
             </div>
           </div>
           <div class="total">
-            <div v-if="item.giftcardNum">提货卡号：{{item.giftcardNum}}</div>
+            <div v-show="item.giftcardNum">提货卡号：{{item.giftcardNum}}</div>
             <div>
               <span style="color:#333333">合计：</span>
+              <span v-if="item.type==3" style="color:#E64340;font-size:1.06rem">❤{{item.point}} + </span>
               <span style="color:#E64340;font-size:1.06rem">¥{{item.totalPrice}}</span>
             </div>
           </div>
@@ -69,7 +75,7 @@
           <div class="option">
             <div>
               <span @click="call(item.phone)">客服电话</span>
-              <span @click="appraise()">评价</span>
+              <span style="float: right;" @click="appraise()">评价</span>
             </div>
             <div>
               <span v-if="item.status==4" @click="orderByaz(item.id)">申请安装</span>
@@ -152,7 +158,7 @@ export default {
       this.page = 1
       this.getOrder()
     },
-    appraise(){
+    appraise() {
     },
     getOrder() {
       let vm = this

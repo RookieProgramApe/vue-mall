@@ -63,8 +63,10 @@
     <div class="btn" v-show="isOriginHei">
       <span>共1件 合计：</span>
       <span style="color:#E64340;">
-        ¥
-        <span style="font-size:1.31rem">{{salePrice}}</span>
+        ❤ <span style="font-size:1.31rem">{{point}}</span>
+      </span> +
+      <span style="color:#E64340;">
+        ¥ <span style="font-size:1.31rem">{{salePrice}}</span>
       </span>
       <button @click="submit">提交订单</button>
     </div>
@@ -103,7 +105,8 @@ export default {
       isOriginHei: true,
       documentHeight: document.documentElement.clientHeight,
       salePrice: '',
-      userInfo: ''
+      userInfo: '',
+      point: ''
     }
   },
   created() {
@@ -142,7 +145,8 @@ export default {
         id: this.cargoId
       }).then(res => {
         this.goodsInfo = res.data
-        this.salePrice = this.goodsInfo.salePrice
+        this.salePrice = this.goodsInfo.salePrice;
+        this.point = this.goodsInfo.point;
         Indicator.close()
         // this.goodsInfo.sku.forEach((item) => {
         //   if (item.id === this.skuId) {
@@ -256,7 +260,7 @@ export default {
                   'signType': payConfig.signType,
                   'paySign': payConfig.paySign,
                   'success': function (result) {
-                    vm.$router.push('/creditPaySuccess')
+                    vm.$router.push('/paySuccess')
                   },
                   'fail': function (result) {
                     console.log(result)
@@ -266,6 +270,8 @@ export default {
                   }
                 })
               })
+            } else if (res.data.ret_code === '1111') {
+              vm.$router.push('/creditPaySuccess');
             }
           })
         }

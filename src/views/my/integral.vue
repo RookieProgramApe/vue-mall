@@ -17,8 +17,8 @@
         <div class="list" v-for="(item,index) in list" :key="index">
           <div>
             <span class="label">{{item.title}}</span>
-            <span class="integral" v-if="item.type=='1'">'+'{{item.point}}</span>
-            <span class="integral1" v-if="item.type!='1'">'-'{{item.point}}</span>
+            <span class="integral" v-if="item.type=='1'"> + {{item.point}}</span>
+            <span class="integral1" v-if="item.type!='1'"> - {{item.point}}</span>
           </div>
           <div>
             <span class="money">交易额：{{item.amount}}元</span>
