@@ -23,7 +23,7 @@ export const constantRouterMap = [
   },
   {
     path: '/my',
-    component: _import('my/index')
+    component: _import('order/appraise')
   },
   {
     path: '/integral',

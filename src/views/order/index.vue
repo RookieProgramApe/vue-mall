@@ -75,7 +75,8 @@
           <div class="option">
             <div>
               <span @click="call(item.phone)">客服电话</span>
-              <span style="float: right;" @click="appraise()">评价</span>
+              <span v-if="item.isAppraise == 0" style="float: right;" @click="appraise()">评价</span>
+              <span v-if="item.isAppraise == 1" style="float: right;" @click="seeAppraise()">查看评价</span>
             </div>
             <div>
               <span v-if="item.status==4" @click="orderByaz(item.id)">申请安装</span>
@@ -159,6 +160,10 @@ export default {
       this.getOrder()
     },
     appraise() {
+      alert('去评价');
+    },
+    seeAppraise() {
+      alert('查看评价');
     },
     getOrder() {
       let vm = this
@@ -396,10 +401,10 @@ export default {
         }
       }
       .option {
-        display: flex;
+        // display: flex;
         align-items: center;
         font-size: 0.75rem;
-        color: #0085fe;
+        color: #F56C6C;
         span {
           display: inline-block;
           width: 4.69rem;
@@ -407,8 +412,8 @@ export default {
           line-height: 1.5rem;
           text-align: center;
           box-sizing: border-box;
-          border-radius: 0.75rem;
-          border: 0.04rem solid #0085fe;
+          // border-radius: 0.75rem;
+          border: 0.04rem solid #F56C6C;
         }
         padding: 0.63rem 0 0.81rem 0;
         div:nth-of-type(2) {

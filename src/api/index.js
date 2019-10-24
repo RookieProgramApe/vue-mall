@@ -417,6 +417,15 @@ export function addOrder(data) {
   })
 }
 
+// 保存评论
+export function saveAppraise(data) {
+  return request({
+    url: 'api/appraise/save',
+    method: 'post',
+    params: data
+  })
+}
+
 
 
 
