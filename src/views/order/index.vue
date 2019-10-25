@@ -75,8 +75,8 @@
           <div class="option">
             <div>
               <span @click="call(item.phone)">客服电话</span>
-              <span v-if="item.isAppraise == 0" style="float: right;" @click="appraise()">评价</span>
-              <span v-if="item.isAppraise == 1" style="float: right;" @click="seeAppraise()">查看评价</span>
+              <span v-if="item.appraiseId == 0" style="float: right;" @click="appraise(item)">评价</span>
+              <span v-else style="float: right;" @click="seeAppraise(item)">查看评价</span>
             </div>
             <div>
               <span v-if="item.status==4" @click="orderByaz(item.id)">申请安装</span>
@@ -159,11 +159,22 @@ export default {
       this.page = 1
       this.getOrder()
     },
-    appraise() {
-      alert('去评价');
+    appraise(item) {
+      this.$router.push({
+        path: '/appraise',
+        query: {
+          cargoId: item.cargoId,
+          orderId: item.id
+        }
+      })
     },
-    seeAppraise() {
-      alert('查看评价');
+    seeAppraise(item) {
+      this.$router.push({
+        path: '/appraiseDetail',
+        query: {
+          appraiseId: item.appraiseId
+        }
+      })
     },
     getOrder() {
       let vm = this

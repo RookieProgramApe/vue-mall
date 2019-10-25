@@ -426,7 +426,41 @@ export function saveAppraise(data) {
   })
 }
 
+// 根据订单id获取评价
+export function getAppraiseByOrderId(data) {
+  return request({
+    url: 'api/appraise/getByOrderId',
+    method: 'post',
+    params: data
+  })
+}
 
+// 根据id获取评价
+export function getAppraiseById(data) {
+  return request({
+    url: 'api/appraise/getAppraiseById',
+    method: 'post',
+    params: data
+  })
+}
+
+// 根据商品id获取评价
+export function queryAppraiseByCargo(data) {
+  return request({
+    url: 'api/appraise/queryAppraiseByCargo',
+    method: 'post',
+    params: data
+  })
+}
+
+// 根据id获取用户信息
+export function getMemberById(data) {
+  return request({
+    url: 'api/member/getMemberById',
+    method: 'post',
+    params: data
+  })
+}
 
 
 

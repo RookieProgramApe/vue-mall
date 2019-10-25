@@ -1,43 +1,7 @@
 <template>
   <!-- 评价页面 -->
   <div class="paySuccess-container">
-    <div style="z-index:-1; position:relative;">
-        <Header :title="title"></Header>
-    </div>
-    <div style="z-index:99; position: absolute; top: 0; right: 0.75rem;">
-        <span style="font-size: 1rem; color: white;" @click="saveAppraise">提交</span>
-    </div>
-    <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
-        <div>
-            <img style="width: 6rem;" :src="cargo.picture"/>
-        </div>
-        <div style="flex: 1; padding: 0.5rem;">
-            <div style="font-size: 1.22rem;">
-              {{cargo.name}}
-            </div><br>
-            <div style="padding: 0rem;">
-                <!-- <span v-for="(item, index) in redStar" :key="index" style="color:#F56C6C;" @click="redStarClick(index)"> ♥ </span>
-                <span v-for="(item, index) in whiteStar" :key="index" style="color:#909399;" @click="whiteStarClick(index)"> ♥ </span> -->
-                <span v-for="(item, index) in star" :key="index" @click="starClick(index)">
-                    <span v-show="item.checked">  <img width="30rem" src="@/assets/image/star01.png"/> </span>
-                    <span v-show="!item.checked"> <img width="30rem" src="@/assets/image/star02.png"/> </span>
-                </span>
-
-
-            </div>
-        </div>
-    </div>
-
-    <div style="padding: 0.5rem; font-size: 1rem;">
-        分享你的使用体验吧
-    </div>
-
-    <div style="background: #fff; height: 10rem; font-size: 1.22rem;">
-        <textarea v-model="describe" style="border:0; width:100%;" rows="5" placeholder="✍符合评价规则，评价超过10个字可获得安心值~" maxlength="500"></textarea>
-        <!-- <div style="padding: 0.5rem;">
-
-        </div> -->
-    </div>
+    评价中心
   </div>
 </template>
 
@@ -59,17 +23,17 @@ export default {
       ],
       describe: '',
       cargoId: '',
-      member: {},
+      memberId: '',
       orderId: '',
       cargo: {}
     }
   },
   created() {
-    this.cargoId = this.$route.query.cargoId;
+    // this.cargoId = this.$route.query.cargoId;
     // this.memberId = this.$route.query.memberId;
-    this.orderId = this.$route.query.orderId;
-    this.myInfo();
-    this.getCargoDetail();
+    // this.orderId = this.$route.query.orderId;
+    // this.myInfo();
+    // this.getCargoDetail();
   },
   mounted() {
     document.title = '评价晒单'
@@ -78,7 +42,7 @@ export default {
     // 获取用户信息
     myInfo() {
       myInfo().then(res => {
-        this.member = res.data;
+        this.memberId = res.data.id
       })
     },
     goMall() {
@@ -111,15 +75,18 @@ export default {
         saveAppraise({
           star: star,
           remark: vm.describe,
-          cargoId: vm.cargoId,
-          orderId: vm.orderId,
-          memberId: vm.memberId
+          // cargoId: vm.cargoId,
+          // orderId: vm.orderId,
+          // memberId: vm.memberId
+          cargoId: 'ef368073961f48ef74b84db847809f40',
+          orderId: '287e7de388a6ccb15f3790239d23c9f7',
+          memberId: '5d983f0cbf7801dca97f29744ff1d8ce'
         }).then(res => {
           if (res.code === 200) {
             alert('评价成功！');
-            vm.$router.replace('/appraiseCenter');
+            vm.router.push('/appraiseCenter');
           } else {
-            alert('评价失败！');
+
           }
         })
     },

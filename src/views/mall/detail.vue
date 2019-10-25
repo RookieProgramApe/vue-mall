@@ -43,7 +43,18 @@
       <div class="name">{{goodsInfo.name}}</div>
     </div>
     <div class="goods-detail">
-      <div class="title">商品详情</div>
+      <div class="title"> <span class="line">|</span> 评价 </div>
+      <div class="contents">
+        <div v-if="appraiseList.length == 0" style="text-align: center; padding: 0.5rem;">
+          还没有人评价哦！
+        </div>
+        <div>
+
+        </div>
+      </div>
+    </div>
+    <div class="goods-detail">
+      <div class="title"> <span class="line">|</span> 商品详情</div>
       <div class="contents">
         <div v-html="goodsInfo.description"></div>
       </div>
@@ -112,7 +123,7 @@
 <script>
 import { MessageBox, Toast, Indicator } from 'mint-ui'
 import Header from '@/components/Header'
-import { detail } from '@/api/index'
+import { detail, queryAppraiseByCargo } from '@/api/index'
 import { Swiper } from 'vux'
 export default {
   name: 'detail',
@@ -139,7 +150,8 @@ export default {
       skuId: '',
       cateId: '',
       inventory: '',
-      scrollTop: false
+      scrollTop: false,
+      appraiseList: []
     }
   },
   computed: {
@@ -149,7 +161,8 @@ export default {
   },
   created() {
     this.id = this.$route.query.id
-    this.getDetail()
+    this.getDetail();
+    this.getAppraiseList(this.id);
   },
   mounted() {
     document.title = '商品详情'
@@ -286,6 +299,16 @@ export default {
     },
     getScrollTop() {
       this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+    },
+    getAppraiseList(id) {
+      queryAppraiseByCargo({
+        page: 1,
+        limit: 20,
+        id: id
+      }).then(res => {
+        this.appraiseList = res.data
+        console.error(res.appraiseList);
+      })
     }
   }
 }
@@ -580,5 +603,12 @@ window.requestAnimFrame = (function () {
   border: 0.01rem solid #ddd !important;
   border-top: none !important;
   border-bottom: none !important;
+}
+.line {
+  width: 0.19rem;
+  height: 0.88rem;
+  background: #F56C6C;
+  margin-right: 0.47rem;
+  color:#F56C6C;
 }
 </style>

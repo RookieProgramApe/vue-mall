@@ -1,11 +1,8 @@
 <template>
   <!-- 评价页面 -->
   <div class="paySuccess-container">
-    <div style="z-index:-1; position:relative;">
+    <div style="position:relative;">
         <Header :title="title"></Header>
-    </div>
-    <div style="z-index:99; position: absolute; top: 0; right: 0.75rem;">
-        <span style="font-size: 1rem; color: white;" @click="saveAppraise">提交</span>
     </div>
     <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
         <div>
@@ -15,6 +12,14 @@
             <div style="font-size: 1.22rem;">
               {{cargo.name}}
             </div><br>
+        </div>
+        <div>
+            <img style="width: 6rem;" :src="member.avatar"/>
+        </div>
+        <div style="flex: 1; padding: 0.5rem;">
+            <div style="font-size: 1.22rem;">
+              {{member.name}}
+            </div><br>
             <div style="padding: 0rem;">
                 <!-- <span v-for="(item, index) in redStar" :key="index" style="color:#F56C6C;" @click="redStarClick(index)"> ♥ </span>
                 <span v-for="(item, index) in whiteStar" :key="index" style="color:#909399;" @click="whiteStarClick(index)"> ♥ </span> -->
@@ -22,28 +27,22 @@
                     <span v-show="item.checked">  <img width="30rem" src="@/assets/image/star01.png"/> </span>
                     <span v-show="!item.checked"> <img width="30rem" src="@/assets/image/star02.png"/> </span>
                 </span>
-
-
+                <span>{{appraise.createTime}}</span>
+            </div>
+            <div>
+                {{appraise.remark}}
             </div>
         </div>
     </div>
-
-    <div style="padding: 0.5rem; font-size: 1rem;">
-        分享你的使用体验吧
-    </div>
-
-    <div style="background: #fff; height: 10rem; font-size: 1.22rem;">
-        <textarea v-model="describe" style="border:0; width:100%;" rows="5" placeholder="✍符合评价规则，评价超过10个字可获得安心值~" maxlength="500"></textarea>
-        <!-- <div style="padding: 0.5rem;">
-
-        </div> -->
+    <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
+        回复
     </div>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
-import { saveAppraise, detail, myInfo } from '@/api/index'
+import { saveAppraise, detail, myInfo, getAppraiseById, getMemberById } from '@/api/index'
 export default {
   name: 'paySuccess',
   components: { Header },
@@ -59,17 +58,17 @@ export default {
       ],
       describe: '',
       cargoId: '',
-      member: {},
+      appraiseId: '',
+      memberId: '',
       orderId: '',
-      cargo: {}
+      cargo: {},
+      appraise: {},
+      member: {}
     }
   },
   created() {
-    this.cargoId = this.$route.query.cargoId;
-    // this.memberId = this.$route.query.memberId;
-    this.orderId = this.$route.query.orderId;
-    this.myInfo();
-    this.getCargoDetail();
+    this.appraiseId = this.$route.query.appraiseId;
+    this.getAppraise();
   },
   mounted() {
     document.title = '评价晒单'
@@ -78,7 +77,7 @@ export default {
     // 获取用户信息
     myInfo() {
       myInfo().then(res => {
-        this.member = res.data;
+        this.memberId = res.data.id
       })
     },
     goMall() {
@@ -117,15 +116,15 @@ export default {
         }).then(res => {
           if (res.code === 200) {
             alert('评价成功！');
-            vm.$router.replace('/appraiseCenter');
+            vm.$router.push('/appraiseCenter');
           } else {
             alert('评价失败！');
           }
         })
     },
-    getCargoDetail() {
+    getCargoDetail(cargoId) {
       detail({
-        id: this.cargoId
+        id: cargoId
       }).then(res => {
         this.cargo = res.data
         // if (this.goodsInfo.mov) {
@@ -136,6 +135,24 @@ export default {
         // this.skuId = this.goodsInfo.sku[0].id
         // this.inventory = this.goodsInfo.sku[0].inventory
       })
+    },
+    getAppraise() {
+        getAppraiseById({
+            id: this.appraiseId
+        }).then(res => {
+            console.error('appraise', res);
+            this.appraise = res.data;
+            this.getCargoDetail(res.data.cargoId);
+            this.getMemberById(res.data.memberId);
+        });
+    },
+    getMemberById(memberId) {
+        getMemberById({
+            id: memberId
+        }).then(res => {
+            console.error(res.data);
+            this.member = res.data;
+        });
     }
   }
 }

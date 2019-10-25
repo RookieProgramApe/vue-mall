@@ -21,11 +21,10 @@ export default {
         text: 'Loading...',
         spinnerType: 'fading-circle'
       })
-      // let APPID = 'wxb60e3a8b79f4e69a'
-      // let REDIRECT_URI = encodeURIComponent(window.location.href)
-      // let REDIRECT_URI = encodeURIComponent('https://aw.wisehuitong.com/')
-      // let state = Math.ceil(Math.random() * 1000)
-      // window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${state}&connect_redirect=1#wechat_redirect`
+      let APPID = 'wxb60e3a8b79f4e69a'
+      let REDIRECT_URI = encodeURIComponent(window.location.href)
+      let state = Math.ceil(Math.random() * 1000)
+      window.location.href = `https://open.weixin.qq.com/connect/oauth2/authorize?appid=${APPID}&redirect_uri=${REDIRECT_URI}&response_type=code&scope=snsapi_userinfo&state=${state}&connect_redirect=1#wechat_redirect`
       return false
     }
     if (code && !localStorage.getItem('token')) {

@@ -375,7 +375,7 @@ export default {
       .line {
         width: 0.19rem;
         height: 0.88rem;
-        background: #0085fe;
+        background: #F56C6C;
         margin-right: 0.47rem;
       }
     }

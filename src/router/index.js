@@ -23,7 +23,7 @@ export const constantRouterMap = [
   },
   {
     path: '/my',
-    component: _import('order/appraise')
+    component: _import('my/index')
   },
   {
     path: '/integral',
@@ -153,6 +153,18 @@ export const constantRouterMap = [
     meta: {
       keepAlive: true
     }
+  },
+  {
+    path: '/appraiseCenter',
+    component: _import('order/appraiseCenter')
+  },
+  {
+    path: '/appraise',
+    component: _import('order/appraise')
+  },
+  {
+    path: '/appraiseDetail',
+    component: _import('order/appraiseDetail')
   }
 
 ]
