@@ -61,13 +61,17 @@ export default {
       cargoId: '',
       member: {},
       orderId: '',
-      cargo: {}
+      cargo: {},
+      cateName: '',
+      skuName: ''
     }
   },
   created() {
     this.cargoId = this.$route.query.cargoId;
     // this.memberId = this.$route.query.memberId;
     this.orderId = this.$route.query.orderId;
+    this.skuName = this.$route.query.skuName;
+    this.cateName = this.$route.query.cateName;
     this.myInfo();
     this.getCargoDetail();
   },
@@ -113,11 +117,17 @@ export default {
           remark: vm.describe,
           cargoId: vm.cargoId,
           orderId: vm.orderId,
-          memberId: vm.memberId
+          memberId: vm.member.id,
+          memberName: vm.member.nickname,
+          memberAvatar: vm.member.avatar,
+          cargoName: vm.cargo.name,
+          skuName: vm.skuName,
+          cateName: vm.cateName,
+          cargoImg: vm.cargo.picture
         }).then(res => {
           if (res.code === 200) {
             alert('评价成功！');
-            vm.$router.replace('/appraiseCenter');
+            vm.$router.replace('/order');
           } else {
             alert('评价失败！');
           }

@@ -49,21 +49,50 @@
       </div>
       <div class="name">{{goodsInfo.name}}</div>
     </div>
-    <div class="goods-detail">
-      <div class="title"> <span class="line">|</span> 评价 </div>
-      <div class="contents">
+    <!-- 评价由此开始 -->
+    <div class="goods-detail" style="padding-bottom: 1rem;">
+      <div class="title"> <span class="line">|</span> 热门评价 </div>
+      <div class="contents1">
         <div v-if="appraiseList.length == 0" style="text-align: center; padding: 0.5rem;">
           还没有人评价哦！
         </div>
-        <div v-for="(item, index) in appraiseList" :key="index">
-          <div>
-
+        <div v-for="(item, index) in appraiseList" :key="index" style="padding: 0.5rem; margin-top: 1rem;" @click="seeAppraiseDetail(item.id)">
+          <img style="width:2.6rem; float: left;" :src="item.memberAvatar" />
+          <div style="float: left; padding-left: 0.5rem;">
+            <div>{{item.memberName}}</div>
+            <div>
+              <span v-for="count in item.star" :key="count">
+                <img width="15rem" src="@/assets/image/star01.png"/>
+              </span>
+              <span v-for="count in 5-item.star" :key="count">
+                <img width="15rem" src="@/assets/image/star02.png"/>
+              </span>
+              <!-- <span v-for="(item, index) in star" :key="index">
+                <span v-show="item.checked">  <img width="15rem" src="@/assets/image/star01.png"/> </span>
+                <span v-show="!item.checked"> <img width="15rem" src="@/assets/image/star02.png"/> </span>
+              </span> -->
+            </div>
+          </div><br><br>
+          <div style="margin-top: 0.5rem; font-size: 1rem;">
+            {{item.remark}}
           </div>
+          <div style="margin-top: 0.5rem;">
+            <span style="color: #606266;" v-show="item.skuName">{{item.skuName}}</span>
+            <span style="color: #606266;" v-show="item.skuName && item.cateName"> | </span>
+            <span style="color: #606266;" v-show="item.cateName">{{item.cateName}}</span>
+            <span style="color: #606266;" v-show="!item.skuName && !item.cateName">暂无规格</span>
+            <span style="color: #909399; float: right;">{{item.createTime}}</span>
+          </div>
+          <div style="height: 0.1rem; background: #F2F6FC; margin-top: 0.5rem;"></div>
+        </div>
+        <div v-if="appraiseList.length != 0"  style="text-align: center; padding-top: 0.5rem;">
+          <span style="padding: 0.3rem; color: #606266; border: 0.08rem solid #606266; border-radius: 1.15rem;" @click="seeAll">查看全部评价</span>
         </div>
       </div>
     </div>
+    <!-- 评价由此结束 -->
     <div class="goods-detail">
-      <div class="title">商品详情</div>
+      <div class="title"> <span class="line">|</span> 商品详情 </div>
       <div class="contents">
         <div v-html="goodsInfo.description"></div>
       </div>
@@ -73,7 +102,7 @@
         <img src="@/assets/image/phones.png" />
         <div>客服</div>
       </div>
-      <button @click="openModel">立即兑换</button>
+      <button @click="openModel">立即领取</button>
     </div>
     <div class="mask animater fadeIn" v-if="showStatus"></div>
     <div class="model animater fadeInUp" v-if="showStatus">
@@ -113,7 +142,7 @@
         <span>1件</span>
       </div>
       <div class="btns">
-        <button @click="buy">立即兑换</button>
+        <button @click="buy">立即领取</button>
       </div>
     </div>
     <div>
@@ -131,7 +160,7 @@
 // import { MessageBox, Toast, Indicator } from 'mint-ui'
 import { MessageBox, Indicator } from 'mint-ui'
 import Header from '@/components/Header'
-import { creditDetail, queryAppraiseByCargo, myInfo } from '@/api/index'
+import { creditDetail, queryTopAppraiseByCargo, myInfo } from '@/api/index'
 import { Swiper } from 'vux'
 export default {
   name: 'creditDetail',
@@ -158,8 +187,15 @@ export default {
       skuId: '',
       inventory: '',
       scrollTop: false,
-        skuType: '',
-        appraiseList: []
+      skuType: '',
+      appraiseList: [],
+      star: [
+        {checked: true},
+        {checked: true},
+        {checked: true},
+        {checked: true},
+        {checked: true}
+      ]
     }
   },
   computed: {
@@ -301,14 +337,29 @@ export default {
       this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
     },
     getAppraiseList(id) {
-      queryAppraiseByCargo({
+      queryTopAppraiseByCargo({
         page: 1,
         limit: 20,
         id: id
       }).then(res => {
         this.appraiseList = res.data
-        console.error(res.appraiseList);
       })
+    },
+    seeAll() {
+      this.$router.push({
+        path: '/appraiseList',
+        query: {
+          cargoId: this.id
+        }
+      });
+    },
+    seeAppraiseDetail(id) {
+        this.$router.push({
+        path: '/appraiseDetail',
+        query: {
+          appraiseId: id
+        }
+      });
     }
   }
 }
@@ -322,7 +373,7 @@ window.requestAnimFrame = (function () {
 })()
 </script>
 
-<style lang="less">
+<style lang="less" >
 .detail-container {
   min-height: 100vh;
   background: #f7f7f7;
@@ -418,7 +469,7 @@ window.requestAnimFrame = (function () {
         }
       }
       .active {
-        background: #0066FE;
+        background: #c81623;
         color: #ffffff;
       }
     }
@@ -448,7 +499,7 @@ window.requestAnimFrame = (function () {
   .goods-detail {
     background: #fff;
     margin-top: 0.78rem;
-    padding-bottom: 3.03rem;
+    padding-bottom: 3rem;
     .title {
       height: 2.72rem;
       padding-left: 0.94rem;
@@ -458,11 +509,20 @@ window.requestAnimFrame = (function () {
       border-bottom: 0.03rem solid #e5e5e5;
     }
     .contents {
+      padding: 0.5rem;
       font-size: 0.81rem;
       color: #000000;
       img {
-        width: 100% !important;
+        width: 100%;
       }
+      p {
+        padding: 0 0.94rem !important;
+      }
+    }
+    .contents1 {
+      padding: 0.5rem;
+      font-size: 0.81rem;
+      color: #000000;
       p {
         padding: 0 0.94rem !important;
       }
@@ -547,7 +607,7 @@ window.requestAnimFrame = (function () {
       border-top: none;
       button {
         height: 2.5rem;
-        background: linear-gradient(to right, #0095FE, #0066FE);
+        background: linear-gradient(to right, #c81623, #c81623);
         border-radius: 1.25rem;
         line-height: 2.5rem;
         font-size: 1.13rem;
@@ -580,16 +640,16 @@ window.requestAnimFrame = (function () {
 }
 .messageContent {
   padding: 2rem 0;
-  color: #0097ff;
+  color: #c81623;
 }
 .mint-msgbox-message {
-  color: #0097ff;
+  color: #c81623;
 }
 .mint-msgbox-btns {
   height: 3.13rem;
 }
 .mint-msgbox-confirm {
-  color: #0097ff;
+  color: #c81623;
 }
 .mint-msgbox-btns button {
   box-sizing: border-box;

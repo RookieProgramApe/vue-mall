@@ -165,6 +165,10 @@ export const constantRouterMap = [
   {
     path: '/appraiseDetail',
     component: _import('order/appraiseDetail')
+  },
+  {
+    path: '/appraiseList',
+    component: _import('credit/appraiseList')
   }
 
 ]

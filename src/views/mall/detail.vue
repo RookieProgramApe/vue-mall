@@ -42,17 +42,48 @@
       </div>
       <div class="name">{{goodsInfo.name}}</div>
     </div>
-    <div class="goods-detail">
-      <div class="title"> <span class="line">|</span> 评价 </div>
-      <div class="contents">
+    <!-- 评价由此开始 -->
+    <div class="goods-detail" style="padding-bottom: 1rem;">
+      <div class="title"> <span class="line">|</span> 热门评价 </div>
+      <div class="contents1">
         <div v-if="appraiseList.length == 0" style="text-align: center; padding: 0.5rem;">
           还没有人评价哦！
         </div>
-        <div>
-
+        <div v-for="(item, index) in appraiseList" :key="index" style="padding: 0.5rem; margin-top: 1rem;"  @click="seeAppraiseDetail(item.id)">
+          <img style="width:2.6rem; float: left;" :src="item.memberAvatar" />
+          <div style="float: left; padding-left: 0.5rem;">
+            <div>{{item.memberName}}</div>
+            <div>
+              <span v-for="count in item.star" :key="count">
+                <img width="15rem" src="@/assets/image/star01.png"/>
+              </span>
+              <span v-for="count in 5-item.star" :key="count">
+                <img width="15rem" src="@/assets/image/star02.png"/>
+              </span>
+              <!-- <span v-for="(item, index) in star" :key="index">
+                <span v-show="item.checked">  <img width="15rem" src="@/assets/image/star01.png"/> </span>
+                <span v-show="!item.checked"> <img width="15rem" src="@/assets/image/star02.png"/> </span>
+              </span> -->
+            </div>
+          </div><br><br>
+          <div style="margin-top: 0.5rem; font-size: 1rem;">
+            {{item.remark}}
+          </div>
+          <div style="margin-top: 0.5rem;">
+            <span style="color: #606266;" v-show="item.skuName">{{item.skuName}}</span>
+            <span style="color: #606266;" v-show="item.skuName && item.cateName"> | </span>
+            <span style="color: #606266;" v-show="item.cateName">{{item.cateName}}</span>
+            <span style="color: #606266;" v-show="!item.skuName && !item.cateName">暂无规格</span>
+            <span style="color: #909399; float: right;">{{item.createTime}}</span>
+          </div>
+          <div style="height: 0.1rem; background: #F2F6FC; margin-top: 0.5rem;"></div>
+        </div>
+        <div v-if="appraiseList.length != 0"  style="text-align: center; padding-top: 0.5rem;">
+          <span style="padding: 0.3rem; color: #606266; border: 0.08rem solid #606266; border-radius: 1.15rem;" @click="seeAll">查看全部评价</span>
         </div>
       </div>
     </div>
+    <!-- 评价由此结束 -->
     <div class="goods-detail">
       <div class="title"> <span class="line">|</span> 商品详情</div>
       <div class="contents">
@@ -123,7 +154,7 @@
 <script>
 import { MessageBox, Toast, Indicator } from 'mint-ui'
 import Header from '@/components/Header'
-import { detail, queryAppraiseByCargo } from '@/api/index'
+import { detail, queryTopAppraiseByCargo } from '@/api/index'
 import { Swiper } from 'vux'
 export default {
   name: 'detail',
@@ -301,14 +332,29 @@ export default {
       this.scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
     },
     getAppraiseList(id) {
-      queryAppraiseByCargo({
+      queryTopAppraiseByCargo({
         page: 1,
         limit: 20,
         id: id
       }).then(res => {
         this.appraiseList = res.data
-        console.error(res.appraiseList);
       })
+    },
+    seeAll() {
+      this.$router.push({
+        path: '/appraiseList',
+        query: {
+          cargoId: this.id
+        }
+      });
+    },
+    seeAppraiseDetail(id) {
+        this.$router.push({
+        path: '/appraiseDetail',
+        query: {
+          appraiseId: id
+        }
+      });
     }
   }
 }
@@ -461,8 +507,15 @@ window.requestAnimFrame = (function () {
       font-size: 0.81rem;
       color: #000000;
       img {
-        width: 100% !important;
+        width: 100%;
       }
+      p {
+        padding: 0 0.94rem !important;
+      }
+    }
+    .contents1 {
+      font-size: 0.81rem;
+      color: #000000;
       p {
         padding: 0 0.94rem !important;
       }

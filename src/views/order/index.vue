@@ -164,7 +164,9 @@ export default {
         path: '/appraise',
         query: {
           cargoId: item.cargoId,
-          orderId: item.id
+          orderId: item.id,
+          skuName: item.skuName,
+          cateName: item.cateName
         }
       })
     },

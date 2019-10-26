@@ -462,6 +462,15 @@ export function getMemberById(data) {
   })
 }
 
+// 根据商品id获取热门评价
+export function queryTopAppraiseByCargo(data) {
+  return request({
+    url: 'api/appraise/queryTopAppraiseByCargo',
+    method: 'post',
+    params: data
+  })
+}
+
 
 
 

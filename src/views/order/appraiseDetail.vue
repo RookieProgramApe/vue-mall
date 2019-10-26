@@ -4,51 +4,70 @@
     <div style="position:relative;">
         <Header :title="title"></Header>
     </div>
-    <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
-        <div>
-            <img style="width: 6rem;" :src="cargo.picture"/>
+    <div class="contents">
+      <!-- 商品信息 -->
+      <div style="padding: 0.5rem; background: #FFF; font-size: 1.22rem;" @click="seeCargoDetail">
+        <img style="width:2.6rem; float: left;" :src="appraise.cargoImg" />
+        <div style="float: left; padding-left: 0.5rem;">
+          <div>{{appraise.cargoName}}</div>
+        </div><br><br>
+      </div>
+      <!-- <div style="height: 0.1rem;"></div> -->
+      <div style="padding: 0.5rem; margin-top: 0.6rem; background: #FFF;">
+        <img v-if="appraise.memberAvatar" style="width:2.6rem; float: left;" :src="appraise.memberAvatar" />
+        <img v-else style="width:2.8rem; float: left;" src="@/assets/image/peisong.jpg" />
+        <div style="float: left; padding-left: 0.5rem; font-size: 1rem; margin-top: -0.25rem;">
+          <div v-if="appraise.memberName">{{appraise.memberName}}</div>
+          <div v-else>一位没有名字的用户</div>
+          <div>
+            <span v-for="count in appraise.star" :key="count">
+              <img width="15rem" src="@/assets/image/star01.png"/>
+            </span>
+            <span v-for="count in 5-appraise.star" :key="count">
+              <img width="15rem" src="@/assets/image/star02.png"/>
+            </span>
+          </div>
+        </div><br><br>
+        <div style="font-size: 1rem;">
+          {{appraise.remark}}
         </div>
-        <div style="flex: 1; padding: 0.5rem;">
-            <div style="font-size: 1.22rem;">
-              {{cargo.name}}
-            </div><br>
+        <div style="margin-top: 0.5rem; font-size: 1rem;">
+          <span style="color: #606266;" v-show="appraise.skuName">{{appraise.skuName}}</span>
+          <span style="color: #606266;" v-show="appraise.skuName && appraise.cateName"> | </span>
+          <span style="color: #606266;" v-show="appraise.cateName">{{appraise.cateName}}</span>
+          <span style="color: #606266;" v-show="!appraise.skuName && !appraise.cateName">暂无规格</span>
+          <span style="color: #909399; float: right;">{{appraise.createTime}}</span>
         </div>
-        <div>
-            <img style="width: 6rem;" :src="member.avatar"/>
-        </div>
-        <div style="flex: 1; padding: 0.5rem;">
-            <div style="font-size: 1.22rem;">
-              {{member.name}}
-            </div><br>
-            <div style="padding: 0rem;">
-                <!-- <span v-for="(item, index) in redStar" :key="index" style="color:#F56C6C;" @click="redStarClick(index)"> ♥ </span>
-                <span v-for="(item, index) in whiteStar" :key="index" style="color:#909399;" @click="whiteStarClick(index)"> ♥ </span> -->
-                <span v-for="(item, index) in star" :key="index" @click="starClick(index)">
-                    <span v-show="item.checked">  <img width="30rem" src="@/assets/image/star01.png"/> </span>
-                    <span v-show="!item.checked"> <img width="30rem" src="@/assets/image/star02.png"/> </span>
-                </span>
-                <span>{{appraise.createTime}}</span>
-            </div>
-            <div>
-                {{appraise.remark}}
-            </div>
-        </div>
+      </div>
+      <!-- <div v-if="appraiseList.length != 0"  style="text-align: center; padding-top: 0.5rem;">
+        <span style="padding: 0.3rem; color: #606266; border: 0.08rem solid #606266; border-radius: 1.15rem;" @click="seeAll">查看全部评价</span>
+      </div> -->
     </div>
-    <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
+    <!-- <div style="padding: 1rem; background: #fff; display: flex;align-items: center;">
         回复
+    </div> -->
+    <!-- <div style="height: 0.1rem;"></div> -->
+    <!-- 回复信息 -->
+    <div style="padding: 0.5rem; background: #FFF; font-size: 1.22rem; min-height: 20rem; margin-top: 0.6rem;">
+      <div style="width: 0.2rem; height: 1.44rem; background: #F56C6C; margin-right: 0.5rem; float: left;"></div>
+      <div style="font-size: 1rem; float: left;">回复</div>
+      <div style="height: 0.1rem; background: #F2F6FC; margin-top: 1.8rem;"></div>
+      <div style="text-align: center;">
+        还没有人回复哦！
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
-import { saveAppraise, detail, myInfo, getAppraiseById, getMemberById } from '@/api/index'
+import { detail, myInfo, getAppraiseById, getMemberById } from '@/api/index'
 export default {
   name: 'paySuccess',
   components: { Header },
   data() {
     return {
-      title: '评价晒单',
+      title: '评价详情',
       star: [
           {checked: true},
           {checked: true},
@@ -71,7 +90,7 @@ export default {
     this.getAppraise();
   },
   mounted() {
-    document.title = '评价晒单'
+    document.title = '评价详情'
   },
   methods: {
     // 获取用户信息
@@ -98,30 +117,6 @@ export default {
             }
         });
     },
-    saveAppraise() {
-        let star = 0;
-        let vm = this;
-        this.star.forEach(item => {
-            if (item.checked) {
-                star++;
-            }
-        });
-
-        saveAppraise({
-          star: star,
-          remark: vm.describe,
-          cargoId: vm.cargoId,
-          orderId: vm.orderId,
-          memberId: vm.memberId
-        }).then(res => {
-          if (res.code === 200) {
-            alert('评价成功！');
-            vm.$router.push('/appraiseCenter');
-          } else {
-            alert('评价失败！');
-          }
-        })
-    },
     getCargoDetail(cargoId) {
       detail({
         id: cargoId
@@ -140,19 +135,36 @@ export default {
         getAppraiseById({
             id: this.appraiseId
         }).then(res => {
-            console.error('appraise', res);
             this.appraise = res.data;
-            this.getCargoDetail(res.data.cargoId);
-            this.getMemberById(res.data.memberId);
+            // this.getCargoDetail(res.data.cargoId);
+            // this.getMemberById(res.data.memberId);
         });
     },
     getMemberById(memberId) {
         getMemberById({
             id: memberId
         }).then(res => {
-            console.error(res.data);
             this.member = res.data;
         });
+    },
+    seeCargoDetail() {
+      // 有规格则是商品
+      if (this.appraise.skuName) {
+        this.$router.push({
+          path: '/detail',
+          query: {
+            id: this.appraise.cargoId
+          }
+        })
+      } else {
+        // 无规格积分兑换
+        this.$router.push({
+          path: '/creditDetail',
+          query: {
+            id: this.appraise.cargoId
+          }
+        })
+      }
     }
   }
 }
